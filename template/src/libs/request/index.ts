@@ -15,14 +15,14 @@ const request = axios.create({
 // 异常拦截处理器
 const errorHandler = (error: AxiosError) => {
   const status = error.response?.status;
-  const useStore = useUserStore();
+  const userStore = useUserStore();
   switch (status) {
     /* eslint-disable no-param-reassign */
     case 400:
       error.message = '请求错误';
       break;
     case 401:
-      useStore.logout();
+      userStore.logout();
       error.message = '未授权，请登录';
       break;
     case 403:
@@ -69,7 +69,7 @@ request.interceptors.request.use((config) => {
 // response interceptor
 request.interceptors.response.use((response: AxiosResponse) => {
   const dataAxios = response.data;
-  const useStore = useUserStore();
+  const userStore = useUserStore();
   // 这个状态码是和后端约定的
   const { code, msg } = dataAxios;
   // 根据 code 进行判断
@@ -88,7 +88,7 @@ request.interceptors.response.use((response: AxiosResponse) => {
       throw Error(msg);
     case 401:
       notification.error({ message: msg });
-      useStore.logout();
+      userStore.logout();
       throw Error(msg);
     default:
       // 不是正确的 code
