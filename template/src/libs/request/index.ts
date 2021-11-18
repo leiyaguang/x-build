@@ -146,12 +146,8 @@ export function useRequest<T>(
   const content = new Promise((resolve, reject) => {
     if (immediate) {
       run()
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((err) => {
-          reject(err);
-        });
+        .then(resolve)
+        .catch(reject);
     }
   });
   return { data, error, loading, content, run, cancel };
